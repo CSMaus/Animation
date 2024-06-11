@@ -1,2 +1,2 @@
 # Animation
-Create animations based on video or real-time camera
+ Create animations based on video or real-time camera
