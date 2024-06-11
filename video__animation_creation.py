@@ -18,7 +18,6 @@ while cap.isOpened():
         break
 
     image_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-
     results = pose.process(image_rgb)
 
     frame_keypoints = []

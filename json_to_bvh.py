@@ -1,13 +1,35 @@
 import json
 import numpy as np
-from bvh import Bvh, BvhNode
 
 video_name = 'First-combo-side1.mkv'
 
 with open(f'{video_name}-keypoints_3d.json', 'r') as f:
     keypoints_data = json.load(f)
 
-# simple BVH structure
+# Mapping of MediaPipe keypoints to BVH joints
+mediapipe_bvh_mapping = {
+    'Hips': 0,
+    'Spine': 11,
+    'Spine1': 12,
+    'Neck': 0,
+    'Head': 0,
+    'LeftShoulder': 11,
+    'LeftArm': 13,
+    'LeftForeArm': 15,
+    'LeftHand': 17,
+    'RightShoulder': 12,
+    'RightArm': 14,
+    'RightForeArm': 16,
+    'RightHand': 18,
+    'LeftUpLeg': 23,
+    'LeftLeg': 25,
+    'LeftFoot': 27,
+    'RightUpLeg': 24,
+    'RightLeg': 26,
+    'RightFoot': 28
+}
+
+# BVH skeleton structure
 skeleton = {
     'Hips': {
         'Spine': {
@@ -46,13 +68,13 @@ skeleton = {
 
 
 # Create a BVH string
-def create_bvh_string(skeleton, keypoints_data):
+def create_bvh_string(skeleton, keypoints_data, mapping):
     bvh_string = "HIERARCHY\n"
     bvh_string += create_hierarchy_string(skeleton, "ROOT", "Hips", indent="")
     bvh_string += "MOTION\n"
     bvh_string += f"Frames: {len(keypoints_data)}\n"
     bvh_string += "Frame Time: 0.0333333\n"  # 30 FPS
-    bvh_string += create_motion_string(keypoints_data)
+    bvh_string += create_motion_string(keypoints_data, mapping)
     return bvh_string
 
 
@@ -76,18 +98,22 @@ def create_hierarchy_string(skeleton, node_type, node_name, indent):
     return hierarchy_string
 
 
-def create_motion_string(keypoints_data):
+def create_motion_string(keypoints_data, mapping):
     motion_string = ""
     for frame in keypoints_data:
         frame_data = []
-        for i, joint in enumerate(frame):
-            frame_data.extend([joint['x'], joint['y'], joint['z'], 0.0, 0.0, 0.0])  # Simplified example: no rotation data
+        for joint_name, joint_index in mapping.items():
+            if joint_index < len(frame):
+                joint = frame[joint_index]
+                if joint_name == 'Hips':
+                    frame_data.extend([joint['x'], joint['y'], joint['z'], 0.0, 0.0, 0.0])
+                else:
+                    frame_data.extend([0.0, 0.0, 0.0])  # Simplified: no rotation data for now
         motion_string += " ".join(map(str, frame_data)) + "\n"
     return motion_string
 
 
-bvh_string = create_bvh_string(skeleton, keypoints_data)
-
+bvh_string = create_bvh_string(skeleton, keypoints_data, mediapipe_bvh_mapping)
 
 with open(f'test-{video_name[:-4]}.bvh', 'w') as f:
     f.write(bvh_string)
