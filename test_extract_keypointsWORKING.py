@@ -6,9 +6,9 @@ import os
 mp_pose = mp.solutions.pose
 pose = mp_pose.Pose(static_image_mode=False, min_detection_confidence=0.5, min_tracking_confidence=0.5)
 
-video_name = 'Third-combo.mkv'
+video_name = 'combo11.mkv'
 video_path = f'MainCombo/{video_name}'
-output_dir = 'keypoints/'
+output_dir = 'combo11/'
 frame_step = 10
 
 if not os.path.exists(output_dir):
@@ -46,7 +46,7 @@ while cap.isOpened():
                 }]
             }
 
-            with open(os.path.join(output_dir, f'frame_{file_id:04d}_keypoints.json'), 'w') as f:
+            with open(os.path.join(output_dir, f'frame_{file_id:04d}_combo11.json'), 'w') as f:
                 json.dump(frame_data, f)
             file_id += 1
 
