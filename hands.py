@@ -8,6 +8,10 @@ pose = mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 hands = mp_hands.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 mp_drawing = mp.solutions.drawing_utils
 
+
+cv2.namedWindow('Pose and Hands', cv2.WINDOW_NORMAL)
+cv2.resizeWindow('Pose and Hands', 1200, 1000)
+
 cap = cv2.VideoCapture(0)
 
 while cap.isOpened():
