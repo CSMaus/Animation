@@ -6,10 +6,10 @@ import os
 mp_pose = mp.solutions.pose
 pose = mp_pose.Pose(static_image_mode=False, min_detection_confidence=0.5, min_tracking_confidence=0.5)
 
-video_name = 'combo11.mkv'
+video_name = 'swordStrike1.mkv'
 video_path = f'MainCombo/{video_name}'
-output_dir = 'combo11/'
-frame_step = 10
+output_dir = 'swordStrike1/'
+frame_step = 1
 
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
@@ -30,7 +30,7 @@ while cap.isOpened():
         if results.pose_landmarks:
             keypoints = []
             for landmark in results.pose_landmarks.landmark:
-                keypoints.extend([landmark.x * frame.shape[1], landmark.y * frame.shape[0], landmark.visibility])
+                keypoints.extend([landmark.x * frame.shape[1], landmark.y * frame.shape[0], 0.95])
 
             frame_data = {
                 "version": 1.2,
