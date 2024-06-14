@@ -10,7 +10,7 @@ mp_drawing = mp.solutions.drawing_utils
 
 
 cv2.namedWindow('Pose and Hands', cv2.WINDOW_NORMAL)
-cv2.resizeWindow('Pose and Hands', 1200, 1000)
+cv2.resizeWindow('Pose and Hands', 900, 700)
 
 cap = cv2.VideoCapture(0)
 
